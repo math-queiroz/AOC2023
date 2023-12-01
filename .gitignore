@@ -1,6 +1,9 @@
+# MacOS
+.DS_Store
+
 ### Repo specifics ###
 # Fetch binary and config
-fetch.exe
+fetch*
 Fetch.toml
 
 # Created by https://www.toptal.com/developers/gitignore/api/rust
