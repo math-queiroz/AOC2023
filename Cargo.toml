@@ -9,6 +9,7 @@ proc-macro = true
 
 [dependencies]
 aho-corasick = "1.1.2"
+hashbrown = "0.14.3"
 itertools = "0.12.0"
 
 # proc-macros

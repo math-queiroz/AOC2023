@@ -29,7 +29,7 @@ pub fn puzzle(attr: TokenStream, item: TokenStream) -> TokenStream {
             let (input, line_ending) = get_input();
             let solution = solve(input, line_ending);
             let elapsed = t.elapsed();
-            println!("{:?}\nSolution  took {:.2?}", solution, elapsed);
+            println!("{:?}\nSolution took {:.2?}", solution, elapsed);
         }
     })
 }
@@ -45,7 +45,7 @@ pub fn assert(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(quote! {
         #function
         #[cfg(test)]
-        mod validation {
+        mod solutions {
             use super::*;
             #[test]
             fn part1() {

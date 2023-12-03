@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::{error::Error, fs, process::Command};
 
-// Sort of yanked from https://github.com/AxlLind/AdventOfCode2022/blob/main/src/main.rs
+// From https://github.com/AxlLind/AdventOfCode2022/blob/main/src/main.rs
 fn main() -> Result<(), Box<dyn Error>> {
     println!("Running AdventOfCode2023 for each day:\n");
 
@@ -16,7 +16,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             .args(["run", "--release", "--bin", day])
             .output()?;
         let out = String::from_utf8(cmd.stdout)?;
-        println!("Day {}:\n{}", day, out);
+        println!("Day {}\n{}", day, out);
     }
 
     Ok(())
