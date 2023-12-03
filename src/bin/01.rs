@@ -1,8 +1,9 @@
 use aho_corasick::AhoCorasick;
 
-fn main() {
-    let (input, line_ending) = aoc::get_input("01.txt");
-    let solution = input
+#[aoc::puzzle("01.txt")]
+#[aoc::assert("54338", "53389")]
+fn main(input: String, line_ending: &str) -> (u32, u32) {
+    input
         .split(line_ending)
         .map(|line| {
             let ac = AhoCorasick::new(vec![
@@ -29,6 +30,5 @@ fn main() {
                 n2.last().unwrap() + n2.first().unwrap_or(n2.last().unwrap()) * 10,
             )
         })
-        .fold((0, 0), |acc, (n1, n2)| (acc.0 + n1, acc.1 + n2));
-    println!("{:?}", solution);
+        .fold((0, 0), |acc, (n1, n2)| (acc.0 + n1, acc.1 + n2))
 }

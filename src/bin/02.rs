@@ -1,7 +1,8 @@
-fn main() {
-    let (input, line_ending) = aoc::get_input("02.txt");
+#[aoc::puzzle("02.txt")]
+#[aoc::assert("2285", "77021")]
+fn main(input: String, line_ending: &str) -> (u32, u32) {
     let upper_limit = &[12, 13, 14];
-    let solution = input
+    input
         .split(line_ending)
         .enumerate()
         .fold((0, 0), |acc, (i, l)| {
@@ -22,11 +23,13 @@ fn main() {
                     };
                     acc
                 });
-            let exceeds = max_cubes.iter().enumerate().all(|(i,c)| c <= &upper_limit[i]);
+            let exceeds = max_cubes
+                .iter()
+                .enumerate()
+                .all(|(i, c)| c <= &upper_limit[i]);
             (
                 acc.0 + (1 + i as u32) * exceeds as u32,
-                acc.1 + max_cubes.iter().fold(1, |acc, c| acc * c)
+                acc.1 + max_cubes.iter().fold(1, |acc, c| acc * c),
             )
-        });
-    println!("{:?}", solution);
+        })
 }
