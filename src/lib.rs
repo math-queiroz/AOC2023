@@ -14,7 +14,7 @@ pub fn puzzle(attr: TokenStream, item: TokenStream) -> TokenStream {
         _ => panic!("Inject_input macro expected a number"),
     };
     TokenStream::from(quote! {
-        fn get_input() -> (String, &'static str) {
+        fn get_input<'a>() -> (String, &'a str) {
             let path_name = format!("input/{}", #file_name);
             let raw_input = std::fs::read_to_string(path_name).expect("Wrong file name!");
             let input = raw_input.trim_end().to_string();
@@ -25,8 +25,8 @@ pub fn puzzle(attr: TokenStream, item: TokenStream) -> TokenStream {
         }
         #function
         fn main() {
-            let t = ::std::time::Instant::now();
             let (input, line_ending) = get_input();
+            let t = ::std::time::Instant::now();
             let solution = solve(input, line_ending);
             let elapsed = t.elapsed();
             println!("{:?}\nSolution took {:.2?}", solution, elapsed);
