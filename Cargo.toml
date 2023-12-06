@@ -7,6 +7,9 @@ default-run = "aoc"
 [lib]
 proc-macro = true
 
+[profile.dev]
+overflow-checks = false
+
 [dependencies]
 aho-corasick = "1.1.2"
 hashbrown = "0.14.3"

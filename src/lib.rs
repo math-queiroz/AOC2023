@@ -11,7 +11,7 @@ pub fn puzzle(attr: TokenStream, item: TokenStream) -> TokenStream {
     let args = &parse_macro_input!(attr as AttributeArgs)[..];
     let file_name = match args {
         [NestedMeta::Lit(Lit::Str(file_name))] => file_name,
-        _ => panic!("Inject_input macro expected a number"),
+        _ => panic!("Invalid filename on aoc::puzzle macro"),
     };
     TokenStream::from(quote! {
         fn get_input<'a>() -> (String, &'a str) {
@@ -40,7 +40,7 @@ pub fn assert(attr: TokenStream, item: TokenStream) -> TokenStream {
     let args = &parse_macro_input!(attr as AttributeArgs)[..];
     let (v1, v2) = match args {
         [NestedMeta::Lit(Lit::Str(v1)), NestedMeta::Lit(Lit::Str(v2))] => (v1, v2),
-        _ => panic!("Expected expected numbers"),
+        _ => panic!("Expected two strings on aoc::assert macro"),
     };
     TokenStream::from(quote! {
         #function
