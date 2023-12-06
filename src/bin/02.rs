@@ -1,6 +1,6 @@
 #[aoc::puzzle("02.txt")]
 #[aoc::assert("2285", "77021")]
-fn main(input: String, line_ending: &str) -> (u32, u32) {
+fn main(input: String, line_ending: &str) -> (usize, usize) {
     let upper_limit = &[12, 13, 14];
     input
         .split(line_ending)
@@ -9,7 +9,7 @@ fn main(input: String, line_ending: &str) -> (u32, u32) {
             let max_cubes = l
                 .split_whitespace()
                 .skip(2)
-                .filter_map(|s| s.parse::<u32>().ok().or(s.bytes().next().map(|n| n as u32)))
+                .filter_map(|s| s.parse::<usize>().ok().or(s.bytes().next().map(|n| n as usize)))
                 .collect::<Vec<_>>()
                 .chunks(2)
                 .into_iter()
@@ -28,7 +28,7 @@ fn main(input: String, line_ending: &str) -> (u32, u32) {
                 .enumerate()
                 .all(|(i, c)| c <= &upper_limit[i]);
             (
-                acc.0 + (1 + i as u32) * exceeds as u32,
+                acc.0 + (1 + i as usize) * exceeds as usize,
                 acc.1 + max_cubes.iter().fold(1, |acc, c| acc * c),
             )
         })

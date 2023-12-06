@@ -4,8 +4,8 @@
 use hashbrown::HashMap;
 #[aoc::puzzle("03.txt")]
 #[aoc::assert("544664", "84495585")]
-fn main(input: String, line_ending: &str) -> (u32, u32) {
-    let mut symbols = HashMap::<(u8, (usize, usize)), Vec::<u32>>::new();
+fn main(input: String, line_ending: &str) -> (usize, usize) {
+    let mut symbols = HashMap::<(u8, (usize, usize)), Vec::<usize>>::new();
     let lines = input.split(line_ending).map(str::as_bytes).collect::<Vec<_>>();
     for (y, line) in lines.iter().enumerate() {
         let mut x = 0;
@@ -24,7 +24,7 @@ fn main(input: String, line_ending: &str) -> (u32, u32) {
             } 
             if x > num_start_index {
                 if let Some(symbol) = symbol {
-                    let number = line[num_start_index..x].iter().fold(0, |a, n| a * 10 + (n - b'0') as u32);
+                    let number = line[num_start_index..x].iter().fold(0, |a, n| a * 10 + (n - b'0') as usize);
                     symbols.entry(symbol).or_insert(Vec::new()).push(number);
                 }
             }

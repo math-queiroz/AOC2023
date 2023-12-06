@@ -3,7 +3,7 @@ use itertools::Itertools;
 
 #[aoc::puzzle("04.txt")]
 #[aoc::assert("17782", "8477787")]
-fn main(input: String, line_ending: &str) -> (u32, u32) {
+fn main(input: String, line_ending: &str) -> (usize, usize) {
     let mut cards = input.split(line_ending).map(|line| {
         let mut numbers = line.split_whitespace().skip(2);
         let winning = numbers.take_while_ref(|c| c.as_bytes()!=b"|").collect::<HashSet<&str>>();

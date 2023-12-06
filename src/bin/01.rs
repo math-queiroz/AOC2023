@@ -2,7 +2,7 @@ use aho_corasick::AhoCorasick;
 
 #[aoc::puzzle("01.txt")]
 #[aoc::assert("54338", "53389")]
-fn main(input: String, line_ending: &str) -> (u32, u32) {
+fn main(input: String, line_ending: &str) -> (usize, usize) {
     input
         .split(line_ending)
         .map(|line| {
@@ -13,15 +13,15 @@ fn main(input: String, line_ending: &str) -> (u32, u32) {
             .unwrap();
             let matches = ac
                 .find_overlapping_iter(line)
-                .map(|m| m.pattern().as_u32())
-                .collect::<Vec<u32>>();
+                .map(|m| m.pattern().as_usize())
+                .collect::<Vec<usize>>();
             return (
                 matches
                     .iter()
                     .map(|n| *n + 1)
                     .filter(|n| *n < 10)
-                    .collect::<Vec<u32>>(),
-                matches.iter().map(|n| (n % 9) + 1).collect::<Vec<u32>>(),
+                    .collect::<Vec<usize>>(),
+                matches.iter().map(|n| (n % 9) + 1).collect::<Vec<usize>>(),
             );
         })
         .map(|(n1, n2)| {
