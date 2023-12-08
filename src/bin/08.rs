@@ -1,7 +1,8 @@
 use hashbrown::HashMap;
 
-fn gcd(a: usize, b: usize) -> usize { 
-    if b==0 {return a} else {gcd(b, a % b)}
+fn gcd(a: usize, b: usize) -> usize {
+    if b == 0 { return a } 
+    else { gcd(b, a % b) }
 }
 
 fn lcm(n: &[usize]) -> usize {
@@ -17,41 +18,33 @@ fn main(input: String, line_ending: &str) -> (usize, usize) {
     let (dirs, mut i1, mut i2) = (dirs.as_bytes(), 0, 0);
     let nodes = input
         .split(line_ending)
-        .map(|l| {(
-            l[0..3].to_owned(),
-            (l[7..10].to_owned(), l[12..15].to_owned()),
-        )})
-        .collect::<HashMap<String, (String, String)>>();
-
-    let mut cur_node = "AAA";
-    while cur_node != "ZZZ" {
-        let (left, right) = nodes.get(cur_node).unwrap();
-        cur_node = if dirs[i1 % dirs.len()] == b'L' { left } else { right };
+        .map(|l| (&l[0..3], (&l[7..10], &l[12..15])))
+        .collect::<HashMap<_, _>>();
+    let mut n = "AAA";
+    while n != "ZZZ" {
+        let (l, r) = nodes.get(n).unwrap();
+        n = if dirs[i1 % dirs.len()] == b'L' { l } else { r };
         i1 += 1;
     }
-
-    let mut cur_nodes = nodes
+    let mut ns = nodes
         .keys()
-        .filter_map(|l| {
-            (&l[2..3] == "A").then(|| Some((l.to_owned(), l)))
-        })
-        .map(|v| v.unwrap())
-        .collect::<HashMap<String, &String>>();
-    let mut cycles_lengths = vec![];
-    while cycles_lengths.len() < cur_nodes.len() {
-        for (start_node, cur_node) in cur_nodes.clone() {
+        .filter(|l| l.ends_with("A"))
+        .map(|v| (v, v))
+        .collect::<HashMap<_, _>>();
+    let mut cycles = vec![];
+    while cycles.len() < ns.len() {
+        for (start_node, cur_node) in ns.clone() {
             let (left, right) = nodes.get(cur_node).unwrap();
-            if &cur_nodes.get(&start_node).unwrap()[2..3] == "Z" { 
-                cycles_lengths.push(i2) 
+            if ns.get(&start_node).unwrap().ends_with("Z") {
+                cycles.push(i2)
             }
-            if dirs[i2 % dirs.len()] == b'L' {
-                *cur_nodes.get_mut(&start_node).unwrap() = left
-            } else {
-                *cur_nodes.get_mut(&start_node).unwrap() = right
+            *ns.get_mut(&start_node).unwrap() = match dirs[i2 % dirs.len()] {
+                b'L' => left,
+                b'R' => right,
+                _ => panic!("Bad input!"),
             };
         }
-        i2+=1;
+        i2 += 1;
     }
-
-    (i1, lcm(&cycles_lengths))
+    (i1, lcm(&cycles))
 }
