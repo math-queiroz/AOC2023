@@ -5,17 +5,25 @@ use quote::quote;
 use syn::{parse_macro_input, AttributeArgs, Ident, ItemFn, Lit, NestedMeta};
 
 #[proc_macro_attribute]
-pub fn puzzle(attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn day(attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut function = parse_macro_input!(item as ItemFn);
-    function.sig.ident = Ident::new("solve", function.sig.ident.span());
+    function.sig.ident = Ident::new("solution", function.sig.ident.span());
     let args = &parse_macro_input!(attr as AttributeArgs)[..];
-    let file_name = match args {
-        [NestedMeta::Lit(Lit::Str(file_name))] => file_name,
-        _ => panic!("Invalid filename on aoc::puzzle macro"),
+    let (day, name) = match args {
+        [NestedMeta::Lit(Lit::Int(d)), NestedMeta::Lit(Lit::Str(n))] => (d, n),
+        _ => panic!("Invalid filename on aoc::day macro"),
     };
     TokenStream::from(quote! {
+        #function
+        fn main() {
+            let (input, line_ending) = get_input();
+            let t = ::std::time::Instant::now();
+            let solution = solution(input, line_ending);
+            let elapsed = t.elapsed();
+            print!("Day{}: {}\n{:?}\nSolution took {:.2?}", #day, #name, solution, elapsed);
+        }
         fn get_input<'a>() -> (String, &'a str) {
-            let path_name = format!("input/{}", #file_name);
+            let path_name = format!("input/{:0>2}.txt", #day);
             let raw_input = std::fs::read_to_string(path_name).expect("Wrong file name!");
             let input = raw_input.trim_end().to_string();
             let Some(lf_pos) = input.find('\n') else { return (input, "\n") };
@@ -23,19 +31,11 @@ pub fn puzzle(attr: TokenStream, item: TokenStream) -> TokenStream {
             if *lf_pre == b'\r' { (input, "\r\n")}
             else { (input, "\n")}
         }
-        #function
-        fn main() {
-            let (input, line_ending) = get_input();
-            let t = ::std::time::Instant::now();
-            let solution = solve(input, line_ending);
-            let elapsed = t.elapsed();
-            println!("{:?}\nSolution took {:.2?}", solution, elapsed);
-        }
     })
 }
 
 #[proc_macro_attribute]
-pub fn assert(attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn asserts(attr: TokenStream, item: TokenStream) -> TokenStream {
     let function = parse_macro_input!(item as ItemFn);
     let args = &parse_macro_input!(attr as AttributeArgs)[..];
     let (v1, v2) = match args {
@@ -45,18 +45,13 @@ pub fn assert(attr: TokenStream, item: TokenStream) -> TokenStream {
     TokenStream::from(quote! {
         #function
         #[cfg(test)]
-        mod solutions {
+        mod test {
             use super::*;
             #[test]
-            fn part1() {
+            fn solutions() {
                 let (input, line_ending) = get_input();
-                let solution = solve(input, line_ending);
+                let solution = solution(input, line_ending);
                 assert_eq!(#v1, solution.0.to_string(), "Solution to part 1");
-            }
-            #[test]
-            fn part2() {
-                let (input, line_ending) = get_input();
-                let solution = solve(input, line_ending);
                 assert_eq!(#v2, solution.1.to_string(), "Solution to part 2");
             }
         }

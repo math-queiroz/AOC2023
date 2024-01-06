@@ -1,5 +1,5 @@
-#[aoc::puzzle("02.txt")]
-#[aoc::assert("2285", "77021")]
+#[aoc::day(02, "Cube Conundrum")]
+#[aoc::asserts("2285", "77021")]
 fn main(input: String, line_ending: &str) -> (usize, usize) {
     let upper_limit = &[12, 13, 14];
     input
@@ -9,10 +9,13 @@ fn main(input: String, line_ending: &str) -> (usize, usize) {
             let max_cubes = l
                 .split_whitespace()
                 .skip(2)
-                .filter_map(|s| s.parse::<usize>().ok().or(s.bytes().next().map(|n| n as usize)))
+                .filter_map(|s| {
+                    s.parse::<usize>()
+                        .ok()
+                        .or(s.bytes().next().map(|n| n as usize))
+                })
                 .collect::<Vec<_>>()
                 .chunks(2)
-                .into_iter()
                 .fold([0; 3], |mut acc, pair| {
                     let pair = pair.to_vec();
                     match pair[1] as u8 {
@@ -28,8 +31,8 @@ fn main(input: String, line_ending: &str) -> (usize, usize) {
                 .enumerate()
                 .all(|(i, c)| c <= &upper_limit[i]);
             (
-                acc.0 + (1 + i as usize) * exceeds as usize,
-                acc.1 + max_cubes.iter().fold(1, |acc, c| acc * c),
+                acc.0 + (1 + i) * exceeds as usize,
+                acc.1 + max_cubes.iter().product::<usize>(),
             )
         })
 }

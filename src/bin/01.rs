@@ -1,7 +1,7 @@
 use aho_corasick::AhoCorasick;
 
-#[aoc::puzzle("01.txt")]
-#[aoc::assert("54338", "53389")]
+#[aoc::day(01, "Trebuchet?!")]
+#[aoc::asserts("54338", "53389")]
 fn main(input: String, line_ending: &str) -> (usize, usize) {
     input
         .split(line_ending)

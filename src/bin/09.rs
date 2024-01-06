@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
-#[aoc::puzzle("09.txt")]
-#[aoc::assert("1904165718", "964")]
+#[aoc::day(09, "Mirage Maintenance")]
+#[aoc::asserts("1904165718", "964")]
 fn main(input: String, line_ending: &str) -> (isize, isize) {
     let series = input
         .split(line_ending)

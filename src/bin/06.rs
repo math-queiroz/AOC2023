@@ -1,14 +1,7 @@
 use itertools::Itertools;
 
-fn find_win_interval_length((time, distance): (usize, usize)) -> usize {
-    (
-        (((time as f64 + f64::sqrt((time * time - 4 * distance) as f64)) / 2f64).ceil() - 1f64) -
-        (((time as f64 - f64::sqrt((time * time - 4 * distance) as f64)) / 2f64).floor() + 1f64)
-    ) as usize + 1
-}
-
-#[aoc::puzzle("06.txt")]
-#[aoc::assert("1731600", "40087680")]
+#[aoc::day(06, "Wait For It")]
+#[aoc::asserts("1731600", "40087680")]
 fn main(input: String, line_ending: &str) -> (usize, usize) {
     let (times, distances) = input
         .split(line_ending)
@@ -35,4 +28,11 @@ fn main(input: String, line_ending: &str) -> (usize, usize) {
             .product(),
         find_win_interval_length((times.1, distances.1)),
     )
+}
+
+fn find_win_interval_length((time, distance): (usize, usize)) -> usize {
+    ((((time as f64 + f64::sqrt((time * time - 4 * distance) as f64)) / 2f64).ceil() - 1f64)
+        - (((time as f64 - f64::sqrt((time * time - 4 * distance) as f64)) / 2f64).floor() + 1f64))
+        as usize
+        + 1
 }
